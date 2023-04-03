@@ -1,19 +1,19 @@
-// Récupération des extensions
-require("dotenv").config();
+const dotenv = require('dotenv');// Récupération des extensions
 const express = require("express"); // import Framework JS
+
 
 const app = express(); // Création de l'application Express
 
-/* TEST
-app.use((req, res) => {
-  res.json({ message: 'Votre requête a bien été reçue !' }); 
-});
-*/
+dotenv.config();
+
 
 const bodyParser = require("body-parser"); // Import du package body-parser (parse automatiquement les requêtes en JSON)
 
 // Pour mettre en place le chemin d'accès à un fichier téléchargé par l'utilisateur
 const path = require('path');
+
+
+
 
 // Déclaration des routes pour les sauces et les utilisateurs
 const userRoutes = require("./routes/user");
@@ -35,6 +35,8 @@ mongoose.connect(uri)
 
 
 app.use(express.json());
+
+
 
 const cors  = require("cors")
 app.use(cors())
@@ -63,42 +65,28 @@ app.use((req, res, next) => {
   
 //app.use(bodyParser.json());
 
+// import middleware express-rate-limit
+const rateLimit = require("express-rate-limit"); 
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limiter chaque IP à 100 requêtes par windowMs
+});
+
+
 // Middleware de téléchargement de fichiers (images des sauces)
 app.use('/images', express.static(path.join(__dirname, 'images')));
-
-// Routes pour accéder aux sauces et aux utilisateurs
-app.use("/api/auth", userRoutes);
+// Routes pour accéder aux sauces et aux utilisateurs 
+// middleware "limiter" uniquement pour les routes utilisateurs
+app.use("/api/auth", limiter, userRoutes); 
 app.use("/api/sauces", sauceRoutes);
 
 
 
+// package sécurité Helmet aide à protéger l'app de certaines des vulnérabilités bien connues du Web en configurant de manière appropriée des en-têtes HTTP. Choix de le retirer car impact affichage des images.
+//const helmet = require('helmet');
+//app.use(helmet());
+
 module.exports = app; // Exportation de l'application créée
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//const path = require("path"); // Pour récupérer la bonne route du fichier "images"
-//app.use("/images", express.static(path.join(__dirname, "images"))); // Récupération du dossier statique où se trouvent les images

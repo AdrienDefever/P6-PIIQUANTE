@@ -9,7 +9,6 @@ const userController = require("../controllers/user");
 
 //Route pour s'inscrire
 router.post("/signup", userController.signup);
-
 //Route pour se connecter
 router.post("/login", userController.login);
 

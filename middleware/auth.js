@@ -9,7 +9,7 @@ module.exports= (req, res, next) => {
         // tout récupérer après l'espace dans le header. Les erreurs générées ici s'afficheront dans le bloc catch.
         const token = req.headers.authorization.split(' ')[1];
         //Vérifier la validité du token en utilisant la clé secrète partagée entre le serveur et le client
-        const decodedToken = jsonwebtoken.verify(token, "RANDOM_TOKEN_SECRET");
+        const decodedToken = jsonwebtoken.verify(token, process.env.TOKEN_SECRET); //process.env.TOKEN_SECRET
         //extraction du user ID de notre token et ajout à l’objet Request afin que nos différentes routes 
         //puissent l’exploiter.
         const userId = decodedToken.userId;
@@ -26,3 +26,13 @@ module.exports= (req, res, next) => {
         res.status(401).json({error : "user not recognized"});
     }
 }
+
+
+/*const crypto = require('crypto');
+
+const generateSecretKey = () => {
+  return crypto.randomBytes(64).toString('hex');
+}
+
+const secretKey = generateSecretKey();
+console.log(secretKey); // affiche une clé secrète aléatoire de 128 caractères*/

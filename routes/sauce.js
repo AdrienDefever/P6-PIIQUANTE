@@ -3,17 +3,15 @@ const express = require("express");
 
 // Déclaration des routes
 const router = express.Router();
-//controlleur pour associer les fonctions aux différentes routes
 
-// Import du middleware d'authentification
-const auth = require("../middleware/auth"); // middleware qui permet d'authentifier les pages de l'application
+// Import du middleware d'authentification (permet d'authentifier les pages de l'application)
+const auth = require("../middleware/auth");
 
-// Import du middleware de gestion de fichiers entrants
-const multer = require("../middleware/multer-config"); // middleware qui définit la destination et le nom de fichier des images
+// Import du middleware de gestion de fichiers entrants (définit la destination et le nom de fichier des images)
+const multer = require("../middleware/multer-config");
 
 // Import du middleware de gestion de fichiers entrants
 const sauceController = require("../controllers/sauce"); 
-
 
 // Ajout des controllers aux routes (incluant le middleware d'authentification et la gestion de fichiers)
 
